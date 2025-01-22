@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Cart{% endblock %}
+
+{% block content %}
+<h1>Your Cart</h1>
+{% if cart_items %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.product.name|default:item.service.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ item.product.price|default:item.service.price }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <form action="{% url 'create_checkout_session' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Proceed to Checkout</button>
+    </form>
+{% else %}
+    <p>Your cart is empty.</p>
+{% endif %}
+{% endblock %}
